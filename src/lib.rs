@@ -1,14 +1,13 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+use compiler::*;
+use volt::tree::SyntaxDisplay;
+use wasm_bindgen::prelude::*;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[wasm_bindgen]
+pub fn parse(input: &str) -> String {
+    let compiler = JsTranspiler::new(());
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    match compiler.parse(input) {
+        Ok(tree) => tree.fmt(0).iter().map(|v| v.to_string()).collect::<Vec<String>>().join("\n"),
+        Err(e) => format!("{:?}", e),
     }
 }
