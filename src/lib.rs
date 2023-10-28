@@ -1,13 +1,12 @@
-use compiler::*;
-use volt::tree::SyntaxDisplay;
+use compiler::{*, js::{JsTranspiler, JsTranspilerOptions}};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub fn parse(input: &str) -> String {
-    let compiler = JsTranspiler::new(());
+    let compiler = JsTranspiler::new(JsTranspilerOptions);
 
-    match compiler.parse(input) {
-        Ok(tree) => tree.fmt(0).iter().map(|v| v.to_string()).collect::<Vec<String>>().join("\n"),
+    match compiler.compile(input) {
+        Ok(v) => v,
         Err(e) => format!("{:?}", e),
     }
 }
